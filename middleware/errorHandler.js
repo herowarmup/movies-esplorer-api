@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
     .status(statusCode)
     .send({
       message: statusCode === 500
-        ? err.message
+        ? 'Произошла ошибка на сервере'
         : message,
     });
   next();
