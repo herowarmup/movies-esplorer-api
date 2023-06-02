@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const { StatusCodes } = require('http-status-codes');
-const { CustomError } = require('../middleware/errorHandler');
+
+const NotFoundError = require('../errors/NotFoundError');
+const { ERROR_MESSAGE_404 } = require('../utils/constants');
 
 const users = require('./users');
 const movies = require('./movies');
@@ -17,7 +18,7 @@ router.use('/movies', auth, movies);
 router.use('/signout', auth, signout);
 
 router.use('*', auth, (req, res, next) => {
-  next(new CustomError('Страница не найдена', StatusCodes.NOT_FOUND));
+  next(new NotFoundError(ERROR_MESSAGE_404));
 });
 
 module.exports = router;

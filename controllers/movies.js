@@ -1,7 +1,16 @@
 const { StatusCodes } = require('http-status-codes');
 
 const Movie = require('../models/movie');
-const { CustomError } = require('../middleware/errorHandler');
+
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
+
+const {
+  ERROR_MESSAGE_FILM_NOT_FOUND,
+  ERROR_MESSAGE_INCORRECT_DATA,
+  ERROR_MESSAGE_FORBIDDEN_DELETE,
+} = require('../utils/constants');
 
 function getMovies(req, res, next) {
   const owner = req.user._id;
@@ -47,7 +56,7 @@ function createMovie(req, res, next) {
     .then((movie) => res.status(StatusCodes.CREATED).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new CustomError('Проверьте правильность данных', StatusCodes.BAD_REQUEST));
+        next(new BadRequestError(ERROR_MESSAGE_INCORRECT_DATA));
       } else {
         next(err);
       }
@@ -61,10 +70,10 @@ async function dislikeMovie(req, res, next) {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        return next(new CustomError('Фильм не найден', StatusCodes.NOT_FOUND));
+        return next(new NotFoundError(ERROR_MESSAGE_FILM_NOT_FOUND));
       }
       if (userId !== movie.owner.toString()) {
-        return next(new CustomError('Нельзя удалять чужие фильмы', StatusCodes.FORBIDDEN));
+        return next(new ForbiddenError(ERROR_MESSAGE_FORBIDDEN_DELETE));
       }
       return Movie.findByIdAndRemove(movieId)
         .then((movieForDislikeLike) => { res.send(movieForDislikeLike); });
