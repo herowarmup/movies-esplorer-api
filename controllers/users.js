@@ -38,15 +38,12 @@ async function getUser(req, res, next) {
 
 async function createUser(req, res, next) {
   const {
-    name, about, avatar, email, password,
+    name, email, password,
   } = req.body;
-
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      email,
       name,
-      about,
-      avatar,
+      email,
       password: hash,
     }))
     .then((user) => {
@@ -85,12 +82,6 @@ async function login(req, res, next) {
       { expiresIn: '7d' },
     );
 
-    res.cookie('jwt', token, {
-      maxAge: 3600000,
-      httpOnly: true,
-      sameSite: true,
-    });
-
     return res.status(StatusCodes.OK).send({ token });
   } catch (err) {
     return next(err);
@@ -102,7 +93,7 @@ const signout = (req, res) => {
 };
 
 async function updateUser(req, res, next) {
-  const { email, name } = req.body;
+  const { name, email } = req.body;
 
   const userId = req.user._id;
 

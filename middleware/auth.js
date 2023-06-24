@@ -7,12 +7,13 @@ const { ERROR_MESSAGE_UNAUTHORIZATION } = require('../utils/constants');
 const { NODE_ENV, JWT_SECRET, JWT_SECRET_KEY } = require('../utils/config');
 
 const auth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const { authorization } = req.headers;
 
-  if (!token) {
+  if (!authorization || !authorization.startsWith('Bearer')) {
     return next(new UnauthorizedError(ERROR_MESSAGE_UNAUTHORIZATION));
   }
 
+  const token = authorization.replace('Bearer ', '');
   let payload;
 
   try {

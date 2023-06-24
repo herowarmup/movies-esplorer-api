@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://hero-movies.nomoredomains.rocks',
-  'http://hero-movies.nomoredomains.rocks',
+  'https://hero-movies.nomoreparties.sbs',
+  'https://hero-movies.nomoreparties.sbs',
   'https://localhost:3001',
   'http://localhost:3001',
 ];

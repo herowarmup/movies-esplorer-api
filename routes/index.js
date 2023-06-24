@@ -15,7 +15,7 @@ router.post('/signin', loginValidate, login);
 
 router.use('/users', auth, users);
 router.use('/movies', auth, movies);
-router.use('/signout', auth, signout);
+router.use('/signout', signout);
 
 router.use('*', auth, (req, res, next) => {
   next(new NotFoundError(ERROR_MESSAGE_404));
