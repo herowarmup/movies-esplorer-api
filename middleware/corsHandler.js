@@ -3,6 +3,8 @@ const allowedCors = [
   'https://hero-movies.nomoreparties.sbs',
   'https://localhost:3001',
   'http://localhost:3001',
+  'http://localhost:3000',
+  'https://localhost:3000',
 ];
 
 const corsHandler = (req, res, next) => {
